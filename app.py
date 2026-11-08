@@ -46,12 +46,45 @@ def add_drink():
     return {'id': drink.id}
 
 
-# DELETE API: Delete a drink using its ID
-@app.route('/drinks/<id>', methods= ['DELETE'])
-def delete_drink(id):
-    drink= Drink.query.get(id)
-    db.session.delete(drink)
+# PUT API: update a drink using its ID
+@app.route('/drinks/<int:id>', methods=['PUT'])
+def put_drink(id):
+
+    drink = Drink.query.get_or_404(id)
+
+    data = request.get_json()
+
+    drink.name = data['name']
+    drink.description = data['description']
+
     db.session.commit()
+
+    return {
+        'message': 'Drink updated successfully',
+        'id': drink.id,
+        'name': drink.name,
+        'description': drink.description
+    }, 200
+
+# PATCH API: update a drink using its ID
+@app.route('/drinks/<int:id>', methods=['PATCH'])
+def patch_drink(id):
+
+    drink = Drink.query.get_or_404(id)
+
+    data = request.get_json()
+
+    drink.name = data['name']
+    drink.description = data['description']
+
+    db.session.commit()
+
+    return {
+        'message': 'Drink updated successfully',
+        'id': drink.id,
+        'name': drink.name,
+        'description': drink.description
+    }, 200
 
 
 # GET API: Retrieve all drinks along with their IDs
